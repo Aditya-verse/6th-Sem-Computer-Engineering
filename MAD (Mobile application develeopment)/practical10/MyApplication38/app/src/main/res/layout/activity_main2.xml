@@ -1,0 +1,81 @@
+<?xml version="1.0" encoding="utf-8"?>
+<TableLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/main"
+    android:layout_marginLeft="10dp"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".MainActivity2">
+
+
+    <TextView
+        android:layout_width="150dp"
+        android:layout_height="wrap_content"
+        android:background="#B32758"
+        android:gravity="center"
+        android:layout_marginBottom="20dp"
+        android:textSize="30dp"
+        android:text="Price Summary" />
+
+    <TableRow>
+        <TextView
+            android:layout_width="150dp"
+            android:layout_height="wrap_content"
+            android:background="#D0BCC3"
+            android:textSize="20dp"
+            android:text="Item Price" />
+
+        <TextView
+            android:layout_width="150dp"
+            android:layout_height="wrap_content"
+            android:textSize="20dp"
+            android:text="500" />
+    </TableRow>
+
+    <TableRow>
+        <TextView
+            android:layout_width="150dp"
+            android:layout_height="wrap_content"
+            android:background="#D0BCC3"
+            android:textSize="20dp"
+            android:text="TAX" />
+
+        <TextView
+            android:layout_width="150dp"
+            android:layout_height="wrap_content"
+            android:textSize="20dp"
+            android:text="40" />
+    </TableRow>
+
+    <TableRow>
+        <TextView
+            android:layout_width="150dp"
+            android:layout_height="wrap_content"
+            android:background="#D0BCC3"
+            android:textSize="20dp"
+            android:text="Shipping" />
+
+        <TextView
+            android:layout_width="150dp"
+            android:layout_height="wrap_content"
+            android:textSize="20dp"
+            android:text="60" />
+    </TableRow>
+
+    <TableRow>
+        <TextView
+            android:layout_width="150dp"
+            android:layout_height="wrap_content"
+            android:background="#D0BCC3"
+            android:textSize="20dp"
+            android:text="Total" />
+
+        <TextView
+            android:layout_width="150dp"
+            android:layout_height="wrap_content"
+            android:textSize="20dp"
+            android:text="600" />
+    </TableRow>
+
+</TableLayout>
