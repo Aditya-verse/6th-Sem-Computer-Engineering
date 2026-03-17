@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html ng-app="myApp">
+
+<head>
+    <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.8.2/angular.min.js"></script>
+</head>
+
+<body ng-controller="myCtrl">
+
+<h3>Student Exam Registration</h3>
+
+<form name="examForm" ng-submit="register()" novalidate>
+
+    <!-- Student Name -->
+    Name:
+    <input type="text" name="sname" ng-model="student.name" required>
+    <span ng-show="examForm.sname.$touched && examForm.sname.$invalid">
+        Name is required
+    </span>
+    <br><br>
+
+    <!-- Roll Number -->
+    Roll No:
+    <input type="number" name="roll" ng-model="student.roll" required>
+    <span ng-show="examForm.roll.$touched && examForm.roll.$invalid">
+        Roll No is required
+    </span>
+    <br><br>
+
+    <!-- Subject -->
+    Subject:
+    <select name="subject" ng-model="student.subject" required>
+        <option value="">Select</option>
+        <option value="Maths">Maths</option>
+        <option value="Science">Science</option>
+        <option value="OSY">OSY</option>
+        <option value="CSS">CSS</option>
+        <option value="MAD">MAD</option>
+    </select>
+    <span ng-show="examForm.subject.$touched && examForm.subject.$invalid">
+        Subject is required
+    </span>
+    <br><br>
+
+    <button type="submit" ng-disabled="examForm.$invalid">
+        Register
+    </button>
+
+</form>
+
+<!-- Show result only after valid submission -->
+<div ng-show="submitted">
+    <h4>Registered Details</h4>
+    Name: {{student.name}} <br>
+    Roll No: {{student.roll}} <br>
+    Subject: {{student.subject}}
+</div>
+
+<script>
+    var app = angular.module("myApp", []);
+
+    app.controller("myCtrl", function($scope) {
+
+        $scope.student = {};
+        $scope.submitted = false;
+
+        $scope.register = function() {
+            if ($scope.examForm.$valid) {
+                $scope.submitted = true;
+            }
+        };
+
+    });
+</script>
+
+</body>
+</html>

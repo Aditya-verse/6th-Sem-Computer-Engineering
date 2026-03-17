@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html ng-app="app">
+<head>
+<script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.8.2/angular.min.js"></script>
+</head>
+
+<body ng-controller="ctrl">
+
+<form>
+Name:
+<input type="text" ng-model="name"><br><br>
+
+Email:
+<input type="email" ng-model="email"><br><br>
+
+<button ng-click="submit()">Submit</button>
+</form>
+
+<p ng-show="show">
+Name: {{ dname }} <br>
+Email: {{ demail }}
+</p>
+
+<script>
+angular.module("app", []).controller("ctrl", function($scope) {
+    $scope.show = false;
+
+    $scope.submit = function() {
+        $scope.dname = $scope.name;
+        $scope.demail = $scope.email;
+        $scope.show = true;
+    };
+});
+</script>
+
+</body>
+</html>

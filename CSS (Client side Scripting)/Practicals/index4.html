@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html ng-app="myApp">
+<head>
+    <title>Parent Child Controller</title>
+    <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.8.2/angular.min.js"></script>
+</head>
+
+<body>
+
+<div ng-controller="parentCtrl">
+    <h2>Company: {{company}}</h2>
+
+    <!-- Child Controller -->
+    <div ng-controller="childCtrl">
+        <h3>Employee: {{employee}}</h3>
+        <h3>Works In: {{company}}</h3>
+    </div>
+</div>
+
+<script>
+var app = angular.module("myApp", []);
+
+app.controller("parentCtrl", function($scope){
+    $scope.company = "Infosys";
+});
+
+app.controller("childCtrl", function($scope){
+    $scope.employee = "Vishal";
+});
+</script>
+
+</body>
+</html>

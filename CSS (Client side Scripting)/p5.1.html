@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html ng-app="myApp">
+<head>
+    <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.8.2/angular.min.js"></script>
+</head>
+
+<body ng-controller="myCtrl">
+
+<h3>New Employee Registration</h3>
+
+<form name="empForm" novalidate>
+
+    Name:
+    <input type="text" name="ename" ng-model="emp.name" required>
+    <span ng-show="empForm.ename.$touched && empForm.ename.$invalid">
+        Name is required
+    </span>
+    <br><br>
+
+    Password:
+    <input type="password" name="pwd" ng-model="emp.password" required>
+    <span ng-show="empForm.pwd.$touched && empForm.pwd.$invalid">
+        Password is required
+    </span>
+    <br><br>
+
+    Gender:
+    <input type="radio" ng-model="emp.gender" value="Male"> Male
+    <input type="radio" ng-model="emp.gender" value="Female"> Female
+    <input type="radio" ng-model="emp.gender" value="Other"> Other
+    <br><br>
+
+    Skills:
+    <input type="checkbox" ng-model="emp.java"> Java
+    <input type="checkbox" ng-model="emp.python"> Python
+    <input type="checkbox" ng-model="emp.html"> HTML
+    <input type="checkbox" ng-model="emp.css"> CSS
+    <br><br>
+
+    Department:
+    <select name="dept" ng-model="emp.dept" required>
+        <option value="">Select</option>
+        <option value="IT">IT</option>
+        <option value="HR">HR</option>
+        <option value="CE">Computer Engineering</option>
+    </select>
+    <span ng-show="empForm.dept.$touched && empForm.dept.$invalid">
+        Department is required
+    </span>
+    <br><br>
+
+    <button type="submit" ng-disabled="empForm.$invalid">Register</button>
+
+</form>
+
+<hr>
+
+<h3>Entered Employee Details</h3>
+
+Name: {{emp.name}} <br>
+Password: {{emp.password}} <br>
+Gender: {{emp.gender}} <br>
+Java: {{emp.java}} <br>
+Python: {{emp.python}} <br>
+HTML: {{emp.html}} <br>
+CSS: {{emp.css}} <br>
+Department: {{emp.dept}} <br>
+
+<script>
+    var app = angular.module("myApp", []);
+
+    app.controller("myCtrl", function($scope) {
+        $scope.emp = {};
+    });
+</script>
+
+</body>
+</html>

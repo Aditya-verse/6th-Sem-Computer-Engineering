@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html ng-app="myApp">
+<head>
+    <title>Student Table with orderBy</title>
+    <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.8.2/angular.min.js"></script>
+    <script src="studentController.js"></script>
+</head>
+
+<body ng-controller="studentCtrl">
+
+<h2>Student Details</h2>
+
+<table border="1">
+<tr>
+    <th>Name</th>
+    <th>Roll No</th>
+    <th>Marks</th>
+</tr>
+
+<tr ng-repeat="s in students | orderBy:'name'">
+    <td>{{s.name}}</td>
+    <td>{{s.roll}}</td>
+    <td>{{s.marks}}</td>
+</tr>
+
+</table>
+
+</body>
+</html>

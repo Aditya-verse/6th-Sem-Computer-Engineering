@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html ng-app="myAPP">
+<head>
+    <title>Country List</title>
+    <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.8.2/angular.min.js"></script>
+</head>
+
+<body ng-controller="myCtrl">
+
+<h2>Country List</h2>
+
+<table border="1" cellpadding="5">
+    <tr>
+        <th>Sr No</th>
+        <th>Country Name</th>
+    </tr>
+
+    <tr ng-repeat="c in country">
+        <td>{{ $index + 1 }}</td>
+        <td>{{ c }}</td>
+    </tr>
+</table>
+
+<script>
+    var app = angular.module("myAPP", []);
+    app.controller("myCtrl", function ($scope) {
+        $scope.country = [
+            "India",
+            "USA",
+            "Russia",
+            "Japan",
+            "China",
+            "Sri Lanka"
+        ];
+    });
+</script>
+
+</body>
+</html>

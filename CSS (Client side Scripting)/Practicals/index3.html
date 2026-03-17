@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html ng-app="myApp">
+<head>
+    <title>Uppercase Lowercase Filter</title>
+
+    <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.8.2/angular.min.js"></script>
+    <script src="controller13.3.js"></script>
+</head>
+
+<body ng-controller="textCtrl">
+
+<h2>Text Filters Example</h2>
+
+Enter Text :
+<input type="text" ng-model="msg">
+
+<p>Uppercase : {{msg | uppercase}}</p>
+<p>Lowercase : {{msg | lowercase}}</p>
+
+</body>
+</html>

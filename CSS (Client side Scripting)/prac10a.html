@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html ng-app="myAPP">
+<head>
+    <title>Students Data</title>
+    <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.8.2/angular.min.js"></script>
+</head>
+
+<body ng-controller="myCtrl">
+
+<h2>Students Data</h2>
+
+<table border="1" cellpadding="5">
+    <tr>
+        <th>Sr No</th>
+        <th>Name</th>
+        <th>Roll No</th>
+        <th>Marks</th>
+    </tr>
+
+    <tr ng-repeat="s in students">
+        <td>{{ $index + 1 }}</td>
+        <td>{{ s.name }}</td>
+        <td>{{ s.rln }}</td>
+        <td>{{ s.marks }}</td>
+    </tr>
+</table>
+
+<script>
+    var app = angular.module("myAPP", []);
+    app.controller("myCtrl", function ($scope) {
+        $scope.students = [
+            { name: "Aditya",  rln: 101, marks: 85 },
+            { name: "Parth",   rln: 102, marks: 78 },
+            { name: "Atharva", rln: 103, marks: 88 },
+            { name: "Aryan",   rln: 104, marks: 75 },
+            { name: "Vaibhav", rln: 105, marks: 82 },
+            { name: "Sanika",  rln: 106, marks: 90 },
+            { name: "Shivani", rln: 107, marks: 86 },
+            { name: "Saksham", rln: 108, marks: 80 },
+            { name: "Rajasvi", rln: 109, marks: 92 },
+            { name: "Prasad",  rln: 110, marks: 84 }
+        ];
+    });
+</script>
+
+</body>
+</html>

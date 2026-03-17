@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html ng-app="myApp">
+<head>
+    <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.8.2/angular.min.js"></script>
+</head>
+
+<body ng-controller="myCtrl">
+
+<h3>User Registration Form</h3>
+
+<form name="userForm">
+
+        Name:
+    <input type="text" name="uname" ng-model="user.name">
+    <span ng-show="submitted && !user.name">
+        Name is required
+    </span>
+    <br><br>
+
+       Password:
+    <input type="password" name="pwd" ng-model="user.password">
+    <span ng-show="submitted && !user.password">
+        Password is required
+    </span>
+    <br><br>
+
+       Gender:
+    <input type="radio" ng-model="user.gender" value="Male"> Male
+    <input type="radio" ng-model="user.gender" value="Female"> Female
+    <span ng-show="submitted && !user.gender">
+        Select gender
+    </span>
+    <br><br>
+
+        Course:
+    <select ng-model="user.course">
+        <option value="">Select</option>
+        <option value="BTech">BTech</option>
+        <option value="MBA">MBA</option>
+    </select>
+    <span ng-show="submitted && !user.course">
+        Select course
+    </span>
+    <br><br>
+
+    <button ng-click="submit()">Submit</button>
+
+</form>
+
+<script>
+    var app = angular.module("myApp", []);
+
+    app.controller("myCtrl", function($scope) {
+
+        $scope.user = { };
+
+        $scope.submitted = false;
+
+        $scope.submit = function() {
+            $scope.submitted = true;
+        };
+
+    });
+</script>
+
+</body>
+</html>
