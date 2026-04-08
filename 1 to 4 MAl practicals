@@ -1,0 +1,188 @@
+1 to 4 practicals 
+
+
+# ==========================================================
+# PRACTICAL 1
+# Q1. Write a Python Program demonstrating Data Preprocessing Techniques.
+# ==========================================================
+
+# ------------------ Cell 1 ------------------
+# Import libraries
+import numpy as np
+import pandas as pd
+from sklearn.preprocessing import LabelEncoder, StandardScaler
+from sklearn.decomposition import PCA
+from sklearn.model_selection import train_test_split
+
+# ------------------ Cell 2 ------------------
+# Create dataset
+data = {
+    "age":[18,19,20,21,np.nan,22],
+    "marks":[65,70,85,90,400,75],
+    "city":["pune","mumbai","pune","delhi","mumbai","delhi"],
+    "result":["pass","pass","pass","pass","fail","pass"]
+}
+df = pd.DataFrame(data)
+print(df)
+
+# ------------------ Cell 3 ------------------
+# Handle missing values
+df["age"].fillna(df["age"].mean(), inplace=True)
+print(df)
+
+# ------------------ Cell 4 ------------------
+# Remove outliers
+df = df[df["marks"] < 100]
+print(df)
+
+# ------------------ Cell 5 ------------------
+# Encoding
+le = LabelEncoder()
+df["city"] = le.fit_transform(df["city"])
+df["result"] = le.fit_transform(df["result"])
+print(df)
+
+# ------------------ Cell 6 ------------------
+# Feature scaling
+scaler = StandardScaler()
+df[["age","marks"]] = scaler.fit_transform(df[["age","marks"]])
+print(df)
+
+# ------------------ Cell 7 ------------------
+# Binning
+df["age_group"] = pd.cut(df["age"], bins=3, labels=["young","middle","old"])
+print(df)
+
+# ------------------ Cell 8 ------------------
+# PCA
+pca = PCA(n_components=2)
+reduced = pca.fit_transform(df[["age","marks","city"]])
+print(reduced)
+
+# ------------------ Cell 9 ------------------
+# Data splitting
+X = df.drop("result", axis=1)
+y = df["result"]
+
+X_train, X_test, y_train, y_test = train_test_split(
+    X, y, test_size=0.2, random_state=1
+)
+print(df)
+
+
+
+# ==========================================================
+# PRACTICAL 2
+# Q2. Write a program for handling missing values.
+# ==========================================================
+
+# ------------------ Cell 1 ------------------
+# Import libraries
+import pandas as pd
+import numpy as np
+
+# ------------------ Cell 2 ------------------
+# Create dataset
+data = {
+    "Age":[18,19,np.nan,21,22],
+    "Marks":[65,np.nan,75,80,85]
+}
+df2 = pd.DataFrame(data)
+print(df2)
+
+# ------------------ Cell 3 ------------------
+# Handle missing values
+df2["Age"].fillna(df2["Age"].mean(), inplace=True)
+df2["Marks"].fillna(df2["Marks"].mean(), inplace=True)
+print(df2)
+
+
+
+# ==========================================================
+# PRACTICAL 3
+# Q3. Write a Python program to read and display data from four different files:
+# data.txt, data.csv, data.json, data.xml
+# ==========================================================
+
+# ------------------ Cell 1 ------------------
+# Read text file
+with open("data.txt","r") as file:
+    txt = file.read()
+print(txt)
+
+# ------------------ Cell 2 ------------------
+# Read CSV file
+import pandas as pd
+csv_data = pd.read_csv("data.csv")
+print(csv_data)
+print(csv_data.info())
+
+# ------------------ Cell 3 ------------------
+# Read JSON file
+import json
+with open("data.json","r") as file:
+    json_data = json.load(file)
+print(json_data)
+
+# ------------------ Cell 4 ------------------
+# Read XML file
+import xml.etree.ElementTree as ET
+tree = ET.parse("data.xml")
+root = tree.getroot()
+
+for child in root:
+    print(child.tag, child.text)
+
+
+
+# ==========================================================
+# PRACTICAL 4
+# Q4. Write a program to implement the Decision Tree model.
+# Evaluate classification performance using accuracy, precision & recall.
+# ==========================================================
+
+# ------------------ Cell 1 ------------------
+# Import libraries
+import pandas as pd
+import numpy as np
+from sklearn.tree import DecisionTreeClassifier
+from sklearn.model_selection import train_test_split
+from sklearn.metrics import accuracy_score, classification_report, confusion_matrix
+
+# ------------------ Cell 2 ------------------
+# Create dataset
+np.random.seed(42)
+
+data = {
+    "Age":np.random.randint(18,60,1000),
+    "Salary":np.random.randint(20000,150000,1000),
+    "Experience":np.random.randint(0,40,1000),
+    "Education_Level":np.random.randint(1,5,1000),
+    "Selected":np.random.randint(0,2,1000)
+}
+df3 = pd.DataFrame(data)
+print(df3)
+
+# ------------------ Cell 3 ------------------
+# Split data
+X = df3.drop("Selected", axis=1)
+y = df3["Selected"]
+
+X_train, X_test, y_train, y_test = train_test_split(
+    X, y, test_size=0.2, random_state=42
+)
+
+# ------------------ Cell 4 ------------------
+# Train model
+model = DecisionTreeClassifier(criterion="entropy", max_depth=5, random_state=42)
+model.fit(X_train, y_train)
+
+# ------------------ Cell 5 ------------------
+# Prediction
+y_pred = model.predict(X_test)
+
+# ------------------ Cell 6 ------------------
+# Evaluation
+print("Accuracy:", accuracy_score(y_test, y_pred))
+print(confusion_matrix(y_test, y_pred))
+print(classification_report(y_test, y_pred))
