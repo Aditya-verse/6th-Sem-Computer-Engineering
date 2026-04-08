@@ -10,183 +10,442 @@ from sklearn.preprocessing import StandardScaler
 
 # ------------------ Cell 2 ------------------
 data = {
-    "Age":[22,25,47,52,46],
-    "Salary":[25000,30000,52000,58000,54000],
-    "Gender":["Male","Female","Female","Male","Male"]
+    "Age":[22,25,47,52,46,56,55,60,62,30,28,35,40,48,50],
+    "Salary":[25000,30000,52000,58000,54000,60000,62000,65000,70000,35000,32000,42000,48000,55000,57000],
+    "Gender":["Male","Female","Female","Male","Male","Female","Male","Female","Male","Female","Male","Female","Male","Female","Male"],
+    "Department":["IT","HR","Finance","IT","Finance","HR","IT","Finance","IT","HR","IT","Finance","HR","IT","Finance"],
+    "Purchased":[0,0,1,1,1,1,1,1,1,0,0,0,1,1,1]
 }
 
 df = pd.DataFrame(data)
-
-# Encoding
-df["Gender"] = df["Gender"].map({"Male":1,"Female":0})
-
-# Scaling
-scaler = StandardScaler()
-df[["Age","Salary"]] = scaler.fit_transform(df[["Age","Salary"]])
-
 print(df)
 
+print(df.isnull().sum())
 
+# ------------------ Cell 3 ------------------
+df_encoded = df.copy()
+df_encoded["Gender"] = df_encoded["Gender"].map({"Male":1,"Female":0})
+
+print(df_encoded["Gender"])
+
+# ------------------ Cell 4 ------------------
+df_encoded = pd.get_dummies(df_encoded, columns=["Department"], drop_first=True)
+
+scaler = StandardScaler()
+df_encoded[["Age","Salary"]] = scaler.fit_transform(df_encoded[["Age","Salary"]])
+
+print(df_encoded)
 
 # ==========================================================
 # PRACTICAL 12
-# Q12. Identify most important features contributing to model accuracy.
+# Q12. Identify the most important features that contribute to model accuracy.
 # ==========================================================
 
 # ------------------ Cell 1 ------------------
+import pandas as pd
+import numpy as np
+from sklearn.model_selection import train_test_split
 from sklearn.ensemble import RandomForestClassifier
+from sklearn.metrics import accuracy_score, classification_report
 
 # ------------------ Cell 2 ------------------
 data = {
-    "Age":[22,25,47,52,46],
-    "Salary":[25000,30000,52000,58000,54000],
-    "Gender":[1,0,0,1,1],
-    "Purchased":[0,0,1,1,1]
+    "Study_Hours":[2,4,6,8,10,1,3,5,7,9,4,6,8,2,5],
+    "Attendance":[60,65,70,75,85,55,60,68,72,80,66,70,78,58,69],
+    "Previous_Score":[40,45,55,60,70,35,42,50,58,68,47,54,63,38,52],
+    "Extra_Class":["No","No","Yes","Yes","Yes","No","No","Yes","Yes","Yes","No","Yes","Yes","No","Yes"],
+    "Pass":[0,0,1,1,1,0,0,1,1,1,0,1,1,0,1]
 }
 
 df = pd.DataFrame(data)
+print(df)
 
-X = df.drop("Purchased", axis=1)
-y = df["Purchased"]
+# ------------------ Cell 3 ------------------
+df_encoded = pd.get_dummies(df, columns=["Extra_Class"], drop_first=True)
+print(df_encoded)
 
-model = RandomForestClassifier()
-model.fit(X,y)
+# ------------------ Cell 4 ------------------
+X = df_encoded.drop("Pass", axis=1)
+y = df_encoded["Pass"]
 
-print(model.feature_importances_)
+X_train, X_test, y_train, y_test = train_test_split(
+    X, y, test_size=0.3, random_state=42
+)
+
+# ------------------ Cell 5 ------------------
+model = RandomForestClassifier(n_estimators=100, random_state=42)
+model.fit(X_train, y_train)
+
+# ------------------ Cell 6 ------------------
+y_pred = model.predict(X_test)
+
+accuracy = accuracy_score(y_test, y_pred)
+print(accuracy)
+
+print(classification_report(y_test, y_pred))
+
+# ------------------ Cell 7 ------------------
+feature_importance = pd.DataFrame({
+    "Feature":X.columns,
+    "Importance":model.feature_importances_
+})
+
+feature_importance = feature_importance.sort_values(by="Importance", ascending=False)
+
+print(feature_importance)
 
 
 
 # ==========================================================
 # PRACTICAL 13
-# Q13. Build KNN model with k = 1, 3, 5 and compare results.
+# Q13. Build KNN Classification model for given dataset.
+# Vary k = 1, 3, 5 and compare results.
 # ==========================================================
 
 # ------------------ Cell 1 ------------------
-from sklearn.neighbors import KNeighborsClassifier
-from sklearn.model_selection import train_test_split
+import pandas as pd
+import numpy as np
 from sklearn.preprocessing import StandardScaler
+from sklearn.model_selection import train_test_split
+from sklearn.neighbors import KNeighborsClassifier
 
 # ------------------ Cell 2 ------------------
 data = {
-    "Marks":[50,60,70,80,90],
-    "Study":[1,2,3,4,5],
-    "Pass":[0,0,1,1,1]
+    "Temp":[35,38,40,42,45,47,50,52,55,58],
+    "Vibration":[1.1,1.5,2.0,2.4,2.8,3.1,3.5,3.8,4.2,4.6],
+    "Pressure":[30,32,35,37,40,42,45,47,50,52],
+    "Voltage":[220,218,215,213,210,208,205,203,200,198],
+    "Current":[5.0,5.5,6.0,6.5,7.0,7.5,8.0,8.5,9.0,9.5],
+    "Humidity":[40,42,45,47,50,52,55,57,60,62],
+    "Noise":[60,62,65,67,70,72,75,77,80,82],
+    "RPM":[1500,1550,1600,1650,1700,1750,1800,1850,1900,1950],
+    "Torque":[10,11,12,13,14,15,16,17,18,19],
+    "Load":[70,72,75,77,80,82,85,87,90,92],
+    "Energy":[100,105,110,115,120,125,130,135,140,145],
+    "OilLevel":[80,78,76,74,72,70,68,66,64,62],
+    "Wear":[1,1,2,2,3,3,4,4,5,5],
+    "Age":[1,1,2,2,3,3,4,4,5,5],
+    "Condition":[0,0,0,0,0,1,1,1,1,1]
 }
 
 df = pd.DataFrame(data)
+print(df)
 
-X = df.drop("Pass", axis=1)
-y = df["Pass"]
+# ------------------ Cell 3 ------------------
+X = df.drop("Condition", axis=1)
+y = df["Condition"]
 
-X_train,X_test,y_train,y_test = train_test_split(X,y,test_size=0.2)
+X_train, X_test, y_train, y_test = train_test_split(
+    X, y, test_size=0.2, random_state=42
+)
 
+# ------------------ Cell 4 ------------------
 scaler = StandardScaler()
 X_train = scaler.fit_transform(X_train)
 X_test = scaler.transform(X_test)
 
-# ------------------ Cell 3 ------------------
-for k in [1,3,5]:
-    model = KNeighborsClassifier(n_neighbors=k)
-    model.fit(X_train,y_train)
-    print("k =", k, "Accuracy =", model.score(X_test,y_test))
+# ------------------ Cell 5 ------------------
+# k = 1
+knn1 = KNeighborsClassifier(n_neighbors=1)
+knn1.fit(X_train, y_train)
+
+pred1 = knn1.predict(X_test)
+print(pred1)
+
+print(knn1.score(X_test, y_test))
+
+# ------------------ Cell 6 ------------------
+# k = 3
+knn3 = KNeighborsClassifier(n_neighbors=3)
+knn3.fit(X_train, y_train)
+
+pred3 = knn3.predict(X_test)
+print(pred3)
+
+print(knn3.score(X_test, y_test))
+
+# ------------------ Cell 7 ------------------
+# k = 5
+knn5 = KNeighborsClassifier(n_neighbors=5)
+knn5.fit(X_train, y_train)
+
+pred5 = knn5.predict(X_test)
+print(pred5)
+
+print(knn5.score(X_test, y_test))
+
 
 
 
 # ==========================================================
 # PRACTICAL 14
-# Q14. Implement SVM with Linear, Polynomial, RBF kernels and compare accuracy.
+# Q14. Implement Support Vector Machine for a dataset and compare
+# accuracy using Linear, Polynomial and RBF kernels.
+#
+# Problem Statement:
+# Titanic Survival Prediction
+# Predict Survival (0 = No, 1 = Yes)
 # ==========================================================
 
 # ------------------ Cell 1 ------------------
-from sklearn import svm
-from sklearn.datasets import load_iris
+import pandas as pd
+import numpy as np
 from sklearn.model_selection import train_test_split
+from sklearn.preprocessing import StandardScaler
+from sklearn.svm import SVC
 from sklearn.metrics import accuracy_score
 
-data = load_iris()
-X = data.data
-y = data.target
-
-X_train,X_test,y_train,y_test = train_test_split(X,y,test_size=0.3)
-
 # ------------------ Cell 2 ------------------
-for kernel in ["linear","poly","rbf"]:
-    model = svm.SVC(kernel=kernel)
-    model.fit(X_train,y_train)
-    y_pred = model.predict(X_test)
-    print(kernel, "Accuracy:", accuracy_score(y_test,y_pred))
+# Create dataset (Titanic-like as per practical)
+data = {
+    "Pclass":[1,3,2,1,3,2,1,3,2,1],
+    "Age":[22,38,26,35,28,30,40,20,25,32],
+    "Fare":[7.25,71.83,7.92,53.1,8.05,13.0,80.0,7.75,10.5,26.0],
+    "Sex":[0,1,1,1,0,0,1,0,1,0],  # Male=0 Female=1
+    "Survived":[0,1,1,1,0,0,1,0,1,0]
+}
+
+df = pd.DataFrame(data)
+print(df)
+
+# ------------------ Cell 3 ------------------
+# Split features and target
+X = df.drop("Survived", axis=1)
+y = df["Survived"]
+
+X_train, X_test, y_train, y_test = train_test_split(
+    X, y, test_size=0.3, random_state=42
+)
+
+# ------------------ Cell 4 ------------------
+# Feature Scaling
+scaler = StandardScaler()
+X_train = scaler.fit_transform(X_train)
+X_test = scaler.transform(X_test)
+
+# ------------------ Cell 5 ------------------
+# Linear Kernel
+svm_linear = SVC(kernel="linear")
+svm_linear.fit(X_train, y_train)
+
+y_pred_linear = svm_linear.predict(X_test)
+print("Linear Accuracy:", accuracy_score(y_test, y_pred_linear))
+
+# ------------------ Cell 6 ------------------
+# Polynomial Kernel
+svm_poly = SVC(kernel="poly")
+svm_poly.fit(X_train, y_train)
+
+y_pred_poly = svm_poly.predict(X_test)
+print("Polynomial Accuracy:", accuracy_score(y_test, y_pred_poly))
+
+# ------------------ Cell 7 ------------------
+# RBF Kernel
+svm_rbf = SVC(kernel="rbf")
+svm_rbf.fit(X_train, y_train)
+
+y_pred_rbf = svm_rbf.predict(X_test)
+print("RBF Accuracy:", accuracy_score(y_test, y_pred_rbf))
+
 
 
 
 # ==========================================================
 # PRACTICAL 15
-# Q15. Apply Logistic Regression to predict pass/fail using marks & study hours.
+# Q1. Modify the program to use your own dataset instead of breast-cancer dataset.
+# Q2. Change test size to 30% and find new accuracy.
+# Q3. Apply Logistic Regression to predict pass/fail using marks & study hours.
 # ==========================================================
 
 # ------------------ Cell 1 ------------------
+import pandas as pd
+from sklearn.model_selection import train_test_split
 from sklearn.linear_model import LogisticRegression
+from sklearn.metrics import accuracy_score
 
 # ------------------ Cell 2 ------------------
+# Own dataset (Student performance)
 data = {
-    "Marks":[40,50,60,70,80],
-    "Study":[1,2,3,4,5],
-    "Pass":[0,0,1,1,1]
+    "Marks":[40,50,60,70,80,55,65,75,85,45],
+    "Study_Hours":[1,2,3,4,5,2,3,4,5,1],
+    "Pass":[0,0,1,1,1,0,1,1,1,0]
 }
 
 df = pd.DataFrame(data)
+print(df)
 
-X = df[["Marks","Study"]]
+# ------------------ Cell 3 ------------------
+# Features and target
+X = df[["Marks","Study_Hours"]]
 y = df["Pass"]
 
-model = LogisticRegression()
-model.fit(X,y)
+# test_size = 30% (as per question)
+X_train, X_test, y_train, y_test = train_test_split(
+    X, y, test_size=0.3, random_state=42
+)
 
-print(model.predict([[65,3]]))
+# ------------------ Cell 4 ------------------
+# Logistic Regression Model
+model = LogisticRegression()
+model.fit(X_train, y_train)
+
+# ------------------ Cell 5 ------------------
+# Prediction
+y_pred = model.predict(X_test)
+print(y_pred)
+
+# ------------------ Cell 6 ------------------
+# Accuracy
+accuracy = accuracy_score(y_test, y_pred)
+print("Accuracy:", accuracy)
 
 
 
 # ==========================================================
 # PRACTICAL 16
-# Q16. Implement PCA for dimensionality reduction and evaluate.
+# Q1. Implement PCA for dimensionality reduction, visualize
+# reduced data and evaluate using classification algorithm.
 # ==========================================================
 
 # ------------------ Cell 1 ------------------
-from sklearn.decomposition import PCA
-from sklearn.datasets import load_iris
+# Import Necessary Libraries
+import numpy as np
+import pandas as pd
+import matplotlib.pyplot as plt
 
-data = load_iris()
-X = data.data
+from sklearn.datasets import load_iris
+from sklearn.preprocessing import StandardScaler
+from sklearn.decomposition import PCA
+from sklearn.model_selection import train_test_split
+from sklearn.linear_model import LogisticRegression
+from sklearn.metrics import accuracy_score
 
 # ------------------ Cell 2 ------------------
+# Load Dataset
+iris = load_iris()
+
+X = iris.data
+y = iris.target
+
+print("Shape of X:", X.shape)
+print("Shape of y:", y.shape)
+
+# ------------------ Cell 3 ------------------
+# Standardize Dataset
+scaler = StandardScaler()
+X_scaled = scaler.fit_transform(X)
+
+# ------------------ Cell 4 ------------------
+# Apply PCA (Reduce 4 → 2)
 pca = PCA(n_components=2)
-X_reduced = pca.fit_transform(X)
+X_pca = pca.fit_transform(X_scaled)
 
-print(X_reduced)
+print("Original shape:", X_scaled.shape)
+print("Reduced shape:", X_pca.shape)
 
+# ------------------ Cell 5 ------------------
+# Explained Variance
+print("Explained Variance Ratio:", pca.explained_variance_ratio_)
+print("Total Variance Captured:", sum(pca.explained_variance_ratio_))
+
+# ------------------ Cell 6 ------------------
+# Visualization
+plt.figure()
+
+for i in range(3):
+    plt.scatter(X_pca[y == i, 0],
+                X_pca[y == i, 1],
+                label=iris.target_names[i])
+
+plt.xlabel("Principal Component 1")
+plt.ylabel("Principal Component 2")
+plt.title("PCA on Iris Dataset")
+plt.legend()
+
+plt.show()
+
+# ------------------ Cell 7 ------------------
+# Classification WITHOUT PCA
+X_train, X_test, y_train, y_test = train_test_split(
+    X_scaled, y, test_size=0.3, random_state=42
+)
+
+model = LogisticRegression(max_iter=5000)
+model.fit(X_train, y_train)
+
+y_pred = model.predict(X_test)
+
+accuracy_original = accuracy_score(y_test, y_pred)
+print("Accuracy without PCA:", accuracy_original)
+
+# ------------------ Cell 8 ------------------
+# Classification WITH PCA
+X_train_pca, X_test_pca, y_train, y_test = train_test_split(
+    X_pca, y, test_size=0.3, random_state=42
+)
+
+model_pca = LogisticRegression(max_iter=5000)
+model_pca.fit(X_train_pca, y_train)
+
+y_pred_pca = model_pca.predict(X_test_pca)
+
+accuracy_pca = accuracy_score(y_test, y_pred_pca)
+print("Accuracy with PCA:", accuracy_pca)
 
 
 # ==========================================================
 # PRACTICAL 17
-# Q17. Build decision-support system for medical diagnosis using Decision Tree.
+# Q1. Modify Decision Tree using criterion = "entropy"
+# Q2. Build simple medical diagnosis system using Decision Tree
 # ==========================================================
 
 # ------------------ Cell 1 ------------------
+# Import Libraries
+import pandas as pd
 from sklearn.tree import DecisionTreeClassifier
+from sklearn.model_selection import train_test_split
+from sklearn.metrics import confusion_matrix, accuracy_score
 
 # ------------------ Cell 2 ------------------
+# Create Medical Dataset
 data = {
-    "Fever":[1,1,0,1,0],
-    "Cough":[1,0,1,1,0],
-    "Fatigue":[1,1,0,1,0],
-    "Disease":[1,1,0,1,0]
+    "Fever":[1,1,1,0,0,0,1,0,1,0],
+    "Cough":[1,1,0,1,0,1,0,0,1,0],
+    "Headache":[1,0,1,1,0,0,1,0,1,0],
+    "Fatigue":[1,1,1,0,0,0,1,0,1,0],
+    "Disease":[1,1,1,0,0,0,1,0,1,0]   # 1 = Yes, 0 = No
 }
 
 df = pd.DataFrame(data)
+print(df)
 
+# ------------------ Cell 3 ------------------
+# Split Features and Target
 X = df.drop("Disease", axis=1)
 y = df["Disease"]
 
-model = DecisionTreeClassifier()
-model.fit(X,y)
+X_train, X_test, y_train, y_test = train_test_split(
+    X, y, test_size=0.3, random_state=42
+)
 
-print(model.predict([[1,1,1]]))
+# ------------------ Cell 4 ------------------
+# Decision Tree using ENTROPY (Important Change)
+model = DecisionTreeClassifier(criterion="entropy")
+
+model.fit(X_train, y_train)
+
+# ------------------ Cell 5 ------------------
+# Prediction
+y_pred = model.predict(X_test)
+print(y_pred)
+
+# ------------------ Cell 6 ------------------
+# Accuracy
+accuracy = accuracy_score(y_test, y_pred)
+print("Accuracy:", accuracy)
+
+# ------------------ Cell 7 ------------------
+# Confusion Matrix
+cm = confusion_matrix(y_test, y_pred)
+print("Confusion Matrix:")
+print(cm)
